@@ -63,10 +63,8 @@ export class AuthController {
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
     const user = req.user;
     const tokens = await this.authService.validateOAuthLogin(user);
-    return res.redirect(`http://localhost:3001/auth-success?token=${tokens.accessToken}`);
+    return res.redirect(`http://localhost:3000/auth-success?token=${tokens.accessToken}`);
   }
-
-  // This part still not test it we have to test it in front-end
 
   @Get('facebook')
   @UseGuards(AuthGuard('facebook'))
@@ -77,6 +75,6 @@ export class AuthController {
   async facebookAuthRedirect(@Req() req, @Res() res: Response) {
     const user = req.user;
     const tokens = await this.authService.validateOAuthLogin(user);
-    return res.redirect(`http://localhost:3001/auth-success?token=${tokens.accessToken}`);
+    return res.redirect(`http://localhost:3000/auth-success?token=${tokens.accessToken}`);
   }
 }

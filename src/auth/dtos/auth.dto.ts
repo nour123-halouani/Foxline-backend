@@ -10,6 +10,8 @@ export class AuthDto {
   name: string;
   phone: string;
   role: string;
+  provider: string;
+  isCompany: Boolean;
 }
 
 export class SendResetCodeDto {

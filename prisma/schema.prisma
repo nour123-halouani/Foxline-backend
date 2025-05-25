@@ -14,8 +14,10 @@ model User {
   password     String
   phone        String?  
   role         String
+  provider     String?
+  isCompany    Boolean?
   refreshToken String?
-  resetCode    String?
+  resetCode    Number?
   resetCodeExpiry DateTime?
   otpValidated     Boolean  @default(false)
   createdAt    DateTime @default(now())
