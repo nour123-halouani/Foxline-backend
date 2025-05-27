@@ -176,7 +176,7 @@ export class AuthService {
       if (!user || !user.resetCode || !user.resetCodeExpiry)
         throw new ForbiddenException('invalidRequest');
 
-      if (user.resetCode !== code)
+      if (Number(user.resetCode) !== Number(code))
         throw new ForbiddenException('invalidCode');
 
       if (user.resetCodeExpiry < new Date())
