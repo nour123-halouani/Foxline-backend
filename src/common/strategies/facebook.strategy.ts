@@ -6,10 +6,10 @@ import { Injectable } from '@nestjs/common';
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
     constructor() {
         super({
-            clientID: process.env.FACEBOOK_CLIENT_ID,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-            callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-            profileFields: ['emails', 'name'],
+            clientID: process.env.FACEBOOK_CLIENT_ID as string,
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+            callbackURL: process.env.FACEBOOK_CALLBACK_URL as string,
+            profileFields: ['emails', 'name', 'displayName'],
         });
     }
 
