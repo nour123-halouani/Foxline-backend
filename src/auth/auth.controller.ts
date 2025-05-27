@@ -63,7 +63,7 @@ export class AuthController {
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
     const user = req.user;
     const tokens = await this.authService.validateOAuthLogin(user);
-    return res.redirect(`http://localhost:3000/auth-success?token=${tokens.accessToken}`);
+    return res.redirect(`https://foxline-front.vercel.app/auth-success?token=${tokens.accessToken}`);
   }
 
   @Get('facebook')
@@ -75,6 +75,6 @@ export class AuthController {
   async facebookAuthRedirect(@Req() req, @Res() res: Response) {
     const user = req.user;
     const tokens = await this.authService.validateOAuthLogin(user);
-    return res.redirect(`http://localhost:3000/auth-success?token=${tokens.accessToken}`);
+    return res.redirect(`https://foxline-front.vercel.app/auth-success?token=${tokens.accessToken}`);
   }
 }
