@@ -1,176 +1,3 @@
-// import { Injectable, ForbiddenException, InternalServerErrorException } from '@nestjs/common';
-// import { PrismaClient } from '@prisma/client';
-// import * as bcrypt from 'bcryptjs';
-// import * as jwt from 'jsonwebtoken';
-// import { AuthDto } from './dtos/auth.dto';
-// import { randomBytes } from 'crypto';
-// import { transporter } from '../utils/nodemailer';
-
-// const prisma = new PrismaClient();
-
-// @Injectable()
-// export class AuthService {
-//   async signup(dto: AuthDto) {
-//     try {
-//       const existingUser = await prisma.user.findUnique({
-//         where: { email: dto.email },
-//       });
-
-//       if (existingUser) {
-//         throw new ForbiddenException('emailExists');
-//       }
-
-//       const hash = await bcrypt.hash(dto.password, 10);
-
-//       const user = await prisma.user.create({
-//         data: {
-//           email: dto.email,
-//           password: hash,
-//           name: dto.name,
-//           phone: dto.phone,
-//           role: dto.role,
-//           isCompany: Boolean(dto.isCompany),
-//         },
-//       });
-
-//       const tokens = await this.signTokens(user.id, user.email);
-
-//       return {
-//         message: 'accountCreated',
-//         ...tokens,
-//       };
-//     } catch (error) {
-//       if (error instanceof ForbiddenException) {
-//         throw error;
-//       }
-
-//       console.error('Signup failed:', error);
-//       throw new InternalServerErrorException('serverError');
-//     }
-//   }
-
-//   async signin(dto: AuthDto) {
-//     const user = await prisma.user.findUnique({
-//       where: { email: dto.email },
-//     });
-//     if (!user) throw new ForbiddenException('User not found');
-
-//     const match = await bcrypt.compare(dto.password, user.password);
-//     if (!match) throw new ForbiddenException('Invalid credentials');
-
-//     return this.signTokens(user.id, user.email);
-//   }
-
-//   async signTokens(userId: number, email: string) {
-//     const payload = { id: userId, email };
-
-//     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET || 'access-random', {
-//       expiresIn: '1h',
-//     });
-//     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET || 'refresh-random', {
-//       expiresIn: '7d',
-//     });
-
-//     await prisma.user.update({
-//       where: { id: userId },
-//       data: { refreshToken },
-//     });
-
-//     return { accessToken, refreshToken };
-//   }
-
-//   async refreshTokens(userId: number, refreshToken: string) {
-//     const user = await prisma.user.findUnique({ where: { id: userId } });
-//     if (!user) throw new ForbiddenException('Access Denied');
-
-//     try {
-//       jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || 'refresh-random');
-//     } catch (err) {
-//       await prisma.user.update({
-//         where: { id: userId },
-//         data: { refreshToken: null },
-//       });
-//       throw new ForbiddenException('Refresh token expired or invalid');
-//     }
-
-//     if (user.refreshToken !== refreshToken) {
-//       throw new ForbiddenException('Refresh token mismatch');
-//     }
-
-//     return this.signTokens(user.id, user.email);
-//   }
-
-//   async logout(userId: number) {
-//     await prisma.user.update({
-//       where: { id: userId },
-//       data: { refreshToken: null },
-//     });
-
-//     return { message: 'Logged out successfully' };
-//   }
-
-//   async sendResetCode(email: string) {
-//     const user = await prisma.user.findUnique({ where: { email } });
-//     if (!user) throw new ForbiddenException('User not found');
-
-//     const code = randomBytes(3).toString('hex');
-//     const expiry = new Date(Date.now() + 15 * 60 * 1000);
-
-//     await prisma.user.update({
-//       where: { email },
-//       data: { resetCode: code, resetCodeExpiry: expiry },
-//     });
-
-//     await transporter.sendMail({
-//       from: process.env.EMAIL_USERNAME,
-//       to: email,
-//       subject: 'Reset Password',
-//       html: `Here is your initialization code : <b>${code}</b>`,
-//     });
-
-//     return { message: 'Reset code sent to your email' };
-//   }
-
-//   async verifyResetCode(email: string, code: string) {
-//     const user = await prisma.user.findUnique({ where: { email } });
-//     if (!user || !user.resetCode || !user.resetCodeExpiry)
-//       throw new ForbiddenException('Invalid request');
-
-//     if (user.resetCode !== code)
-//       throw new ForbiddenException('Invalid reset code');
-
-//     if (user.resetCodeExpiry < new Date())
-//       throw new ForbiddenException('Reset code expired');
-
-//     await prisma.user.update({
-//       where: { email },
-//       data: {
-//         otpValidated: true,
-//       },
-//     });
-
-//     return { message: 'Code validated successfully' };
-//   }
-
-//   async resetPassword(email: string, newPassword: string) {
-//     const user = await prisma.user.findUnique({ where: { email } });
-//     if (!user || !user.otpValidated)
-//       throw new ForbiddenException('Reset code not validated');
-
-//     const hashed = await bcrypt.hash(newPassword, 10);
-
-//     await prisma.user.update({
-//       where: { email },
-//       data: {
-//         password: hashed,
-//         resetCode: null,
-//         resetCodeExpiry: null,
-//         otpValidated: false,
-//       },
-//     });
-
-//     return { message: 'Password has been reset successfully' };
-//   }
 import {
   Injectable,
   ForbiddenException,
@@ -318,7 +145,7 @@ export class AuthService {
       const user = await prisma.user.findUnique({ where: { email } });
       if (!user) throw new ForbiddenException('userNotFound');
 
-      const code = randomInt(100000, 1000000).toString();
+      const code = randomInt(100000, 1000000);
       const expiry = new Date(Date.now() + 15 * 60 * 1000);
 
       await prisma.user.update({
@@ -342,7 +169,7 @@ export class AuthService {
     }
   }
 
-  async verifyResetCode(email: string, code: string) {
+  async verifyResetCode(email: string, code: number) {
     try {
       const user = await prisma.user.findUnique({ where: { email } });
 

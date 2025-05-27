@@ -20,7 +20,7 @@ export class SendResetCodeDto {
 
 export class VerifyResetCodeDto {
   email: string;
-  code: string;
+  code: number;
   newPassword: string;
 }
 

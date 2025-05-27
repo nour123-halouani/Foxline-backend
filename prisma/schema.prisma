@@ -17,9 +17,17 @@ model User {
   provider     String?
   isCompany    Boolean?
   refreshToken String?
-  resetCode    Number?
+  resetCode    Int?
   resetCodeExpiry DateTime?
   otpValidated     Boolean  @default(false)
   createdAt    DateTime @default(now())
 }
 
+model FAQ {
+  id          Int      @id @default(autoincrement())
+  questionEn  String
+  questionAr  String
+  responseEn  String
+  responseAr  String
+  createdAt   DateTime @default(now())
+}
