@@ -31,3 +31,15 @@ model FAQ {
   responseAr  String
   createdAt   DateTime @default(now())
 }
+
+model ContactUs {
+  id          Int      @id @default(autoincrement())
+  fullName    String
+  email       String
+  phone       String
+  subject     String
+  message     String
+  connected   Boolean? @default(false)
+  createdAt   DateTime @default(now())
+}
+

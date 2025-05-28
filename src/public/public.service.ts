@@ -1,6 +1,5 @@
 import {
   Injectable,
-  ForbiddenException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
@@ -18,7 +17,7 @@ export class PublicService {
     try {
       return await this.prisma.fAQ.create({ data });
     } catch (error) {
-      throw new InternalServerErrorException('Failed to create FAQ');
+      throw new InternalServerErrorException('serverError');
     }
   }
 
@@ -28,7 +27,32 @@ export class PublicService {
         orderBy: { createdAt: 'desc' },
       });
     } catch (error) {
-      throw new InternalServerErrorException('Failed to fetch FAQs');
+      throw new InternalServerErrorException('serverError');
+    }
+  }
+
+  async createContactUs(data: {
+    fullName: string;
+    email: string;
+    phone: string;
+    subject: string;
+    message: string;
+  }) {
+    try {
+      await this.prisma.contactUs.create({ data });
+      return ({ message: "messageSendWithSuccess" })
+    } catch (error) {
+      throw new InternalServerErrorException('serverError');
+    }
+  }
+
+  async getAllContactUs() {
+    try {
+      return await this.prisma.contactUs.findMany({
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('serverError');
     }
   }
 }

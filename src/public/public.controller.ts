@@ -8,7 +8,7 @@ import { PublicService } from './public.service';
 
 @Controller('public')
 export class PublicController {
-  constructor(private publicService: PublicService) {}
+  constructor(private publicService: PublicService) { }
 
   @Post('faq')
   async createFAQ(@Body() body: {
@@ -24,4 +24,21 @@ export class PublicController {
   async getFAQs() {
     return this.publicService.getAllFAQs();
   }
+
+  @Post('contact-us')
+  async createContactUs(@Body() body: {
+    fullName: string;
+    email: string;
+    phone: string;
+    subject: string;
+    message: string;
+  }) {
+    return this.publicService.createContactUs(body);
+  }
+
+  @Get('contact-us')
+  async getAllContactUs() {
+    return this.publicService.getAllContactUs();
+  }
+
 }

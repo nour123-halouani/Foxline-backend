@@ -214,7 +214,7 @@ export class AuthService {
           otpValidated: false,
         },
       });
-
+      
       return { message: 'passwordResetSuccessfully' };
     } catch (error) {
       if (error instanceof ForbiddenException) throw error;
