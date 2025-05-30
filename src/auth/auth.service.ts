@@ -40,6 +40,16 @@ export class AuthService {
       const tokens = await this.signTokens(user.id, user.email);
 
       return {
+        user: {
+          id: user.id,
+          role: user.role,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          provider: user.provider,
+          isCompany: user.isCompany,
+          createdAt: user.createdAt
+        },
         message: 'accountCreated',
         ...tokens,
       };
@@ -64,6 +74,16 @@ export class AuthService {
       const tokens = await this.signTokens(user.id, user.email);
 
       return {
+        user: {
+          id: user.id,
+          role: user.role,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          provider: user.provider,
+          isCompany: user.isCompany,
+          createdAt: user.createdAt
+        },
         message: 'welcomeBackFromBack',
         ...tokens,
       };
@@ -214,7 +234,7 @@ export class AuthService {
           otpValidated: false,
         },
       });
-      
+
       return { message: 'passwordResetSuccessfully' };
     } catch (error) {
       if (error instanceof ForbiddenException) throw error;
